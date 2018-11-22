@@ -11,15 +11,11 @@
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
-*.iws
+*/target
 *.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/build/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+/.idea
+*.class
+target/
+.project
+.settings/
+*.classpath
