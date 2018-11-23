@@ -9,7 +9,7 @@ import java.util.Properties;
 /**
  * 一个简易的kafka消息发送示例
  */
-public class Provider {
+public class ProviderMain {
     public static void main(String[] args) {
         Properties properties = new Properties();
         // 指定kafka服务器
