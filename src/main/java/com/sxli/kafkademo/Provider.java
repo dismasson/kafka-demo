@@ -31,7 +31,7 @@ public class Provider {
         properties.put("max.block.ms", 3000);
 
         Producer<String, String> producer = new KafkaProducer<String, String>(properties);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             producer.send(new ProducerRecord<String, String>("my-topic",
                     Integer.toString(i), Integer.toString(i)));
         }
