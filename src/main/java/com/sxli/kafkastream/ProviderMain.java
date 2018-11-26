@@ -1,4 +1,4 @@
-package com.sxli.kafkademo;
+package com.sxli.kafkastream;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -31,10 +31,15 @@ public class ProviderMain {
         properties.put("max.block.ms", 3000);
 
         Producer<String, String> producer = new KafkaProducer<String, String>(properties);
-        for (int i = 0; i < 1000; i++) {
-            producer.send(new ProducerRecord<String, String>("my-topic",
-                    Integer.toString(i), Integer.toString(i)));
-        }
+
+        producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
+                "htllo"));
+        producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
+                "htllo"));
+        producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
+                "tom"));
+        producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
+                "alex"));
         producer.close();
     }
 }

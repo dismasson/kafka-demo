@@ -1,4 +1,4 @@
-package com.sxli.kafkademo.多线程Consumer方式一;
+package com.sxli.kafkastream;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -7,8 +7,9 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class ConsumerThread implements Runnable {
-    public void run() {
+public class ConsumerMain {
+
+    public static void main(String[] args) {
         Properties properties = new Properties();
         // 指定kafka服务器
         properties.put("bootstrap.servers", "47.98.116.157:9092");
@@ -21,9 +22,9 @@ public class ConsumerThread implements Runnable {
         // 指定key反序列化类
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         // 指定value反序列化类
-        properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
-        consumer.subscribe(Arrays.asList("my-topic"));
+        properties.put("value.deserializer", "org.apache.kafka.common.serialization.LongDeserializer");
+        KafkaConsumer<String, String> consumer = new KafkaConsumer(properties);
+        consumer.subscribe(Arrays.asList("streams-wordcount-output"));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
             for (ConsumerRecord<String, String> record : records) {
@@ -35,4 +36,5 @@ public class ConsumerThread implements Runnable {
             consumer.commitSync();
         }
     }
+
 }

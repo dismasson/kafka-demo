@@ -1,7 +1,24 @@
-# kafka-demo
-kafka使用案例
-## 两种多线程Consumer的区别
-对应方式  | 优点 |    缺点
-  ------------- | ------------- | -------------
- 方式一  | 1.容易实现 2.Partition的顺序实现容易 | 如果采用的负载均衡方式是range，那么消费者数量不能超过分区数，否则会出现某些消费者无法消费的状况，其次每个Consumer都需要一个TCP链接，会造成大量的系统性能损耗
- 方式二  | 扩展简易，实际上就是一个消费者，拉取到消息后将消息拆分成交给多个线程执行 | 会出现线程安全问题，提交offset等操作尽量放在ConsumerWorker中处理
+# 1.运行当前项目的Demo
+### 创建topic
+`./kafka-topics.sh --create --zookeeper localhost:2181 --topic streams-plaintext-output --partitions 1 --replication-factor 1`  
+`./kafka-topics.sh --create --zookeeper localhost:2181 --topic streams-plaintext-input --partitions 1 --replication-factor 1`
+### 检测topic状态
+`./kafka-topics.sh --describe --zookeeper localhost:2181 --topic streams-plaintext-input`  
+`./kafka-topics.sh --describe --zookeeper localhost:2181 --topic streams-plaintext-output`
+### 运行demo的ConsumerMain以及ProviderMain
+ConsumerMain打印`worcount`数据  
+ProviderMain负责往topic`streams-plaintext-input`录入文字
+# 2.如何利用KafkaStream的demo来演示？
+## 第一步：创建两个topic,"streams-plaintext-output"跟"streams-plaintext-input"
+### 创建topic
+`./kafka-topics.sh --create --zookeeper localhost:2181 --topic streams-plaintext-output --partitions 1 --replication-factor 1`  
+`./kafka-topics.sh --create --zookeeper localhost:2181 --topic streams-plaintext-input --partitions 1 --replication-factor 1`
+### 检测topic状态
+`./kafka-topics.sh --describe --zookeeper localhost:2181 --topic streams-plaintext-input`  
+`./kafka-topics.sh --describe --zookeeper localhost:2181 --topic streams-plaintext-output`
+## 第二步：运行KafkaStream的WordCountDemo
+`./kafka-run-class.sh org.apache.kafka.streams.examples.wordcount.WordCountDemo`
+## 第三步：往streams-plaintext-intput发送数据
+`./kafka-console-producer.sh --broker-list localhost:2181 -topic streams-plaintext-input`
+## 第四步：消费streams-wordcount-output验证
+`./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic streams-wordcount-output --from-beginning --formatter kafka.tools.DefaultMessageFormatter --property print.key=true --property print.value=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer`
