@@ -9,12 +9,13 @@ import org.apache.kafka.streams.kstream.*;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * 一个简易的kafka消息发送示例
  */
 public class WordCountMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Properties properties = new Properties();
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams_wordcount");
         // 指定kafka服务器
@@ -32,10 +33,13 @@ public class WordCountMain {
         kTable.toStream().to("streams-wordcount-output", Produced.with(Serdes.String()
                 , Serdes.Long()));
         KafkaStreams streams = new KafkaStreams(streamsBuilder.build(), properties);
+        final CountDownLatch latch = new CountDownLatch(1);
         // 绑定钩子函数，在JVM关闭的时候调用此函数
-        Runtime.getRuntime().addShutdownHook(new Thread(new StreamsClose(streams)));
+        Runtime.getRuntime().addShutdownHook(new Thread(new StreamsClose(streams, latch)));
         // 启动
         streams.start();
+        // 等待销毁
+        latch.await();
     }
 
     /**
@@ -66,8 +70,11 @@ public class WordCountMain {
 
         private KafkaStreams streams;
 
-        public StreamsClose(KafkaStreams streams) {
+        private CountDownLatch latch;
+
+        public StreamsClose(KafkaStreams streams, CountDownLatch latch) {
             this.streams = streams;
+            this.latch = latch;
         }
 
         @Override
