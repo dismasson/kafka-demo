@@ -33,13 +33,13 @@ public class ProviderMain {
         Producer<String, String> producer = new KafkaProducer<String, String>(properties);
 
         producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
-                "htllo"));
+                "sxli"));
         producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
-                "htllo"));
+                "sxli"));
         producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
-                "tom"));
+                "zxx"));
         producer.send(new ProducerRecord<String, String>("streams-plaintext-input",
-                "alex"));
+                "yw"));
         producer.close();
     }
 }

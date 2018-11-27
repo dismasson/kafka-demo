@@ -6,8 +6,9 @@
 `./kafka-topics.sh --describe --zookeeper localhost:2181 --topic streams-plaintext-input`  
 `./kafka-topics.sh --describe --zookeeper localhost:2181 --topic streams-plaintext-output`
 ### 运行demo的ConsumerMain以及ProviderMain
-ConsumerMain打印`worcount`数据  
-ProviderMain负责往topic`streams-plaintext-input`录入文字
+`ProviderMain`负责往`streams-plaintext-input`录入文字  
+`WordCountMain`负责文字统计并且将计算结果录入`streams-wordcount-output`  
+`ConsumerMain`打印`streams-wordcount-output`数据  
 # 2.如何利用KafkaStream的demo来演示？
 ## 第一步：创建两个topic,"streams-plaintext-output"跟"streams-plaintext-input"
 ### 创建topic
